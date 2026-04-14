@@ -1,5 +1,6 @@
 from spark_session import get_spark_session
 import pyspark.sql.functions as sf
+from pathlib import Path
 
 
 def build_characters(spark_session):
@@ -18,6 +19,7 @@ def build_characters(spark_session):
         sf.col("mass").try_cast("float"),
     )
 
+    Path("data/delta").mkdir(parents=True, exist_ok=True)
     characters.write.format("delta").mode("overwrite").save("data/delta/characters")
     return characters
 
@@ -39,6 +41,7 @@ def build_film_characters(spark_session):
     # > Join
     film_characters = film_characters.join(characters, "character_url")
 
+    Path("data/delta").mkdir(parents=True, exist_ok=True)
     film_characters.write.format("delta").mode("overwrite").save(
         "data/delta/film_characters"
     )
@@ -63,6 +66,7 @@ def build_film_stats(spark_session):
         .drop("film_url")
     )
 
+    Path("data/delta").mkdir(parents=True, exist_ok=True)
     film_stats.write.format("delta").mode("overwrite").save("data/delta/film_stats")
     return film_stats
 

@@ -3,7 +3,7 @@
 A quick look at creating a data pipeline with PySpark, Parquet files (saved locally rather than in S3 storage) and Delta tables. Data come from the SWAPI API as a quick (I already have familiarity with data and code to extract as json files) and lightweight data source (a few small tables with relations to build on). PySpark is overkill here but it's just for learning purposes.
 
 ```
-SWAPI API → raw parquet [films, characters] → delta/characters → delta/film_characters → delta/film_stats
+SWAPI API → raw parquet → delta/characters → delta/film_characters → delta/film_stats
 ```
 
 The project builds this film statistics table
@@ -27,11 +27,11 @@ The project builds this film statistics table
 
 #### Structure
 
-- ``./extract_swapi.py`` contains script to extract SWAPI data and save as *.parquet* files
+- [``./extract_swapi.py``](extract_swapi.py) contains script to extract SWAPI data and save as *.parquet* files
 - ``./data/raw/`` contains the raw *.parquet* files after extraction from SWAPI
-- ``./spark_session.py`` defines a function to get the PySpark session for the SWAPI pipeline
-- ``./transform_swapi.py`` reads the raw *.parquet* files, performs some transformations (broken into a few different assets), and generates the film stats table (number of characters and average character mass and height per film)
-- ``./data/delta/`` contains the delta tables from transformation
+- [``./spark_session.py``](spark_session.py) defines a function to get the PySpark session for the SWAPI pipeline
+- [``./transform_swapi.py``](transform_swapi.py) reads the raw *.parquet* files, performs some transformations (broken into a few different assets), and generates the film stats table (number of characters and average character mass and height per film)
+- ``./data/delta/``  contains the delta tables from transformation
 
 
 #### Running

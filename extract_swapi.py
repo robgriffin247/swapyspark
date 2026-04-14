@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 def extract_swapi(endpoint="planets", verbose=False):
+    
     next_page = f"https://swapi.dev/api/{endpoint}"
     data = []
 
@@ -21,14 +22,14 @@ def extract_swapi(endpoint="planets", verbose=False):
     if verbose:
         print(f"{len(data)} records returned!")
 
+    Path("data/raw").mkdir(parents=True, exist_ok=True)
+    pl.DataFrame(data).write_parquet(f"data/raw/{endpoint}.parquet")
     return data
 
 
 if __name__ == "__main__":
     for e in ["people", "films"]:
         data = extract_swapi(endpoint=e, verbose=True)
-        Path("data/raw").mkdir(parents=True, exist_ok=True)
-        pl.DataFrame(data).write_parquet(f"data/raw/{e}.parquet")
 
     # Verify
     print(pl.read_parquet("data/raw/films.parquet"))
