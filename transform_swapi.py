@@ -75,6 +75,7 @@ if __name__ == "__main__":
     build_film_characters(spark_session)
     build_film_stats(spark_session)
 
+    # Verify
     spark_session.read.format("delta").load("data/delta/characters").show()
     spark_session.read.format("delta").load("data/delta/film_characters").show()
     spark_session.read.format("delta").load("data/delta/film_stats").show()

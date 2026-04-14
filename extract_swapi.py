@@ -1,6 +1,6 @@
 import httpx
 import polars as pl
-import duckdb
+from pathlib import Path
 
 
 def extract_swapi(endpoint="planets", verbose=False):
@@ -25,12 +25,10 @@ def extract_swapi(endpoint="planets", verbose=False):
 
 
 if __name__ == "__main__":
-    for e in ["people", "films", "planets", "vehicles", "starships", "species"]:
+    for e in ["people", "films"]:
         data = extract_swapi(endpoint=e, verbose=True)
-        with open(f"data/raw/{e}.parquet", "w") as f:
-            pl.DataFrame(data).write_parquet(f)
+        Path("data/raw").mkdir(parents=True, exist_ok=True)
+        pl.DataFrame(data).write_parquet(f"data/raw/{e}.parquet")
 
     # Verify
-    with duckdb.connect() as con:
-        films = con.sql("select * from 'data/raw/films.parquet'").pl()
-        print(films)
+    print(pl.read_parquet("data/raw/films.parquet"))
